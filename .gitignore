@@ -1,0 +1,5 @@
+src/backend/serviceAccountKey.json
+src/backend/Firebase/serviceAccountKey.json
+src/backend/.env
+node_modules/
+.cache/

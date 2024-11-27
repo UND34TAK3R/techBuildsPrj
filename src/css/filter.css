@@ -1,0 +1,20 @@
+.cpu-page{
+    display: flex;
+}
+
+.filter-container{
+    width: 250px;
+    margin-right: 20px;
+}
+
+.cpu-table{
+    flex: 1;
+}
+
+.case-table{
+    flex: 1;
+}
+
+.case-page{
+    display: flex;
+}
