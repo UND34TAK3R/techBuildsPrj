@@ -134,15 +134,15 @@ function RAM() {
                     <tbody>
                         {ram.map((item) => (
                             <tr key={item.ram_id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.capacity}</td>
-                                <td>{item.speed}</td>
-                                <td>{item.modules}</td>
-                                <td>{item.latency}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.capacity}</td>
+                                <td className='text-white'>{item.speed}</td>
+                                <td className='text-white'>{item.modules}</td>
+                                <td className='text-white'>{item.latency}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className='btn btn-outline-light' onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

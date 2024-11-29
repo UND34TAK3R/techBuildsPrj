@@ -5,7 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getIdTokenResult } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import {auth} from "../../backend/Firebase/firebase";
-
+import Sidebar from "./sidebar";
 const AdminPSU = () => {
   const [psuDevices, setPsuDevices] = useState([]);
   const [error, setError] = useState("");
@@ -71,8 +71,9 @@ const AdminPSU = () => {
   };
 
   return (
-    <div>
-      <h1>All PSU</h1>
+    <div className="d-flex">
+            <Sidebar />
+      <h1 className="text-center mb-4">All PSU</h1>
       <div><button onClick={handleAdd}>Add Power Supply Unit</button></div>
       <table className="table table-bordered">
         <thead>

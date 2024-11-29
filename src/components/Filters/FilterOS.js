@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const OSFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => {
-    const name = ["Windows 10", "Windows 11","Windows 8", "Linux", "Mac OS"]
-    const architecture = ["x86", "x64"]
-    
+const OSFilter = ({ filters, onFilterChange, onApplyFilters, onResetFilters }) => {
+    const name = ["Windows 10", "Windows 11", "Windows 8", "Linux", "Mac OS"];
+    const architecture = ["x86", "x64"];
+
+    const [expandedFilters, setExpandedFilters] = useState({
+        name: false,
+        architecture: false,
+    });
 
     const handleCheckBoxChange = (key, value) => {
         const newValues = filters[key]?.includes(value)
@@ -16,35 +20,52 @@ const OSFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => 
         onFilterChange('price', { min: Number(min), max: Number(max) });
     };
 
+    const toggleExpand = (filter) => {
+        setExpandedFilters(prevState => ({
+            ...prevState,
+            [filter]: !prevState[filter],
+        }));
+    };
+
+    const renderCheckboxes = (key, items) => {
+        return (
+            <div>
+                <h4>{key}</h4>
+                {items.slice(0, expandedFilters[key] ? items.length : 3).map((item) => (
+                    <div key={item}>
+                        <label className='text-white'>
+                            <input
+                                type="checkbox"
+                                checked={filters[key]?.includes(item) || false}
+                                onChange={() => handleCheckBoxChange(key, item)}
+                            />
+                            {item}
+                        </label>
+                    </div>
+                ))}
+                {items.length > 3 && (
+                    <span
+                        onClick={() => toggleExpand(key)}
+                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        {expandedFilters[key] ? 'Show Less' : 'Show More'}
+                    </span>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="filter-container">
             <h3>Filter Operating Systems:</h3>
-            <div>
-                <h4>Name</h4>
-                {name.map((name) => (
-                    <label key={name}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.name?.includes(name) || false}
-                            onChange={() => handleCheckBoxChange("name", name)}
-                        />
-                        {name}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Architecture</h4>
-                {architecture.map((architecture) => (
-                    <label key={architecture}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.architecture?.includes(architecture) || false}
-                            onChange={() => handleCheckBoxChange("architecture", architecture)}
-                        />
-                        {architecture}
-                    </label>
-                ))}
-            </div>
+        <div className='text-white'>
+            {/* Name Filter */}
+            {renderCheckboxes('name', name)}
+
+            {/* Architecture Filter */}
+            {renderCheckboxes('architecture', architecture)}
+        </div>
+            {/* Price Range Slider */}
             <div>
                 <h4>Price Range</h4>
                 <input
@@ -55,11 +76,14 @@ const OSFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => 
                     value={filters.price?.max || 1000}
                     onChange={(e) => handlePriceSliderChange(filters.price?.min || 100, e.target.value)}
                 />
-                <span>{filters.price?.min || 100}  $- {Number(filters.price?.max) || 1000} $</span>
+                <span>{filters.price?.min || 100} $ - {Number(filters.price?.max) || 1000} $</span>
             </div>
-            <button onClick={onApplyFilters}>Apply</button>
-            <button onClick={onResetFilters}>Reset</button>
+
+            {/* Apply and Reset Buttons */}
+            <button className='btn btn-outline-light me-2' onClick={onApplyFilters}>Apply</button>
+            <button className='btn btn-outline-danger' onClick={onResetFilters}>Reset</button>
         </div>
-     );
+    );
 };
+
 export default OSFilter;

@@ -24,7 +24,6 @@ const NewBuild = ({ handleClose, handleNewBuild }) => { // Removed handleNewBuil
         try {
             // Add the new build to Firestore
             await addNewBuild(BuildData);
-            alert('Build successfully created!'); // Show success message
             handleClose(); // Close the popup after successful submission
             handleNewBuild();
         } catch (error) {
@@ -35,17 +34,30 @@ const NewBuild = ({ handleClose, handleNewBuild }) => { // Removed handleNewBuil
 
     return (
         <div className="overlay">
-            <div className="popup">
-                <h2>New Build</h2>
-                <p>Welcome to our Builder!<br /> Please enter the name and type of build you want.</p>
-                <form onSubmit={handleSubmit}>
-                    <label>
-                        Build Name:
-                        <input type="text" name="BuildName" required />
-                    </label>
-                    <label>
-                        Build Type:
-                        <select name="BuildType" id="BuildType" required>
+            <div className="popup bg-dark p-4 rounded">
+                <h2 className="text-white text-center">New Build</h2>
+                <p className="text-white text-center">
+                    Welcome to our Builder!<br /> Please enter the name and type of build you want.
+                </p>
+                <form onSubmit={handleSubmit} className="mt-4">
+                    <div className="mb-3">
+                        <label htmlFor="BuildName" className="form-label text-white">Build Name:</label>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            name="BuildName" 
+                            id="BuildName" 
+                            required 
+                        />
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="BuildType" className="form-label text-white">Build Type:</label>
+                        <select 
+                            name="BuildType" 
+                            id="BuildType" 
+                            className="form-select" 
+                            required
+                        >
                             <option value="Work">Work</option>
                             <option value="Gaming">Gaming</option>
                             <option value="Content Creation">Content Creation</option>
@@ -55,12 +67,15 @@ const NewBuild = ({ handleClose, handleNewBuild }) => { // Removed handleNewBuil
                             <option value="Education">Education</option>
                             <option value="Remote Work">Remote Work</option>
                         </select>
-                    </label><br /><br />
-                    <button type="submit">Submit</button>
+                    </div>
+                    <div className="text-center">
+                        <button className="btn btn-outline-light" type="submit">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
     );
+    
 };
 
 export default NewBuild;

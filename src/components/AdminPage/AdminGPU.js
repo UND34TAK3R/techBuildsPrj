@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getIdTokenResult } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import {auth} from "../../backend/Firebase/firebase";
+import Sidebar from "./sidebar";
 
 const AdminGPU = () => {
     const [gpuDevices, setGPU] = useState([]);
@@ -69,8 +70,9 @@ const AdminGPU = () => {
       console.log("Add");
     };
     return (
-        <div>
-        <h1>All Graphics Cards</h1>
+      <div className="d-flex">
+            <Sidebar />
+        <h1 className="text-center mb-4">All Graphics Cards</h1>
         <div><button onClick={handleAdd}>Add Graphics Card</button></div>
         <table className="table table-bordered">
           <thead>

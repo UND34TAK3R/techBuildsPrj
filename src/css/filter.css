@@ -1,20 +1,137 @@
-.cpu-page{
-    display: flex;
+/* General Page Styling */
+body, html {
+    height: 100%;
+    margin: 0;
 }
 
-.filter-container{
+/* Container for the CPU and Case pages */
+.cpu-page, .case-page {
+    display: flex;
+    height: 100%;
+    min-height: 100vh;
+    background: transparent url('../assets/Builder.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+/* Filter container styling (For Filter component) */
+.filter-container {
     width: 250px;
     margin-right: 20px;
+    border-right: 2px solid white; /* White line separating filter and table */
+    padding-right: 20px;
 }
 
-.cpu-table{
+/* Table container for CPU and Case */
+.cpu-table, .case-table {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Add margin to the table for spacing */
+.table-container {
+    margin-left: 20px;
     flex: 1;
 }
 
-.case-table{
-    flex: 1;
+/* Table styling - CPU and Case tables */
+.cpu-table table, .case-table table {
+    background-color: transparent; /* Transparent background */
+    border-collapse: collapse;
+    width: 100%;
+    color: white; /* White text for readability */
 }
 
-.case-page{
+/* Table header and cell styling */
+.cpu-table th, .cpu-table td, .case-table th, .case-table td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Light white border */
+}
+
+/* Table header styling */
+.cpu-table th, .case-table th {
+    background-color: rgba(0, 0, 0, 0.5); /* Dark background for table headers */
+    color: white;
+}
+
+/* Alternating row color for even rows */
+.cpu-table tr:nth-child(even), .case-table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05); /* Slightly darker for alternating rows */
+}
+
+/* Button styling for the CPU and Case tables */
+.btn-outline-light {
+    border-color: white;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.btn-outline-light:hover {
+    background-color: white;
+    color: #343a40; /* Dark text color on hover */
+    border-color: #343a40; /* Dark border color on hover */
+}
+
+/* Table body cell text styling */
+table tbody td {
+    color: white;
+    text-align: center;
+    background-color: transparent !important; /* Ensure transparency */
+}
+
+/* Optional: Add padding and center-align for better appearance in table rows */
+.cpu-table td, .cpu-table th, .case-table td, .case-table th {
+    text-align: center;
+}
+
+/* Adjust page layout for better responsiveness */
+.cpu-page, .case-page {
     display: flex;
+    flex-direction: row; /* Ensures filter and table are side by side */
+    align-items: flex-start; /* Aligns them at the top */
+    justify-content: flex-start;
+}
+
+/* Styling for CPU and Case page content */
+.case-table, .cpu-table {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.filter-container h4 {
+    color: white;
+    text-transform: capitalize;  /* Capitalizes the first letter of each word */
+}
+
+.filter-container label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.filter-container input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.filter-container button {
+    margin-top: 10px;
+}
+
+span {
+    cursor: pointer;
+    text-decoration: underline;
+    color: white;
+}
+
+h3 {
+    color: white;
+}
+
+/* For the range sliders */
+.filter-container input[type="range"] {
+    width: 100%;
 }

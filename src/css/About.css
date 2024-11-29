@@ -1,0 +1,48 @@
+/* About.css */
+.about-page {
+  background-image: url('../assets/About.jpg'); /* Replace with your background image URL */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 100vh;
+}
+
+.about-section {
+  position: relative;
+  z-index: 1;
+}
+
+.mission, .team {
+  background-color: rgba(0, 0, 0, 0.6); /* Transparent background for mission and team sections */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.mission h3, .team h3 {
+  color: #fff;
+}
+
+.team-member {
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent background for each team member */
+  margin: 10px 0;
+  border-radius: 10px;
+}
+
+.team-member h4 {
+  color: #fff;
+}
+
+h2, p {
+  color: white;
+}
+
+h2.display-4 {
+  font-weight: bold;
+}
+
+p.lead {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}

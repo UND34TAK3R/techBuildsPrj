@@ -1,0 +1,35 @@
+.custom-hover-btn {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition for scaling */
+  }
+  
+  .custom-hover-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.3);  /* Light white overlay */
+    filter: blur(15px);  /* Intense blur effect */
+    transition: opacity 0.3s ease;
+    opacity: 0; /* Initially not visible */
+    z-index: -1;
+  }
+  
+  .custom-hover-btn:hover::before {
+    opacity: 1; /* Show the blur effect on hover */
+  }
+  
+  .custom-hover-btn:hover {
+    color: white;
+    background-color: transparent; /* Keep the background transparent */
+    transform: scale(1.1);  /* Slightly enlarge the button */
+  }
+  
+  .custom-hover-btn:active {
+    background-color: transparent; /* Keep background transparent on click */
+    transform: scale(1);  /* Reset size to normal after clicking */
+  }
+  

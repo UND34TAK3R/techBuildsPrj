@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getIdTokenResult } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import {auth} from "../../backend/Firebase/firebase";
+import Sidebar from "./sidebar";
 
 
 const AdminOS = () => {
@@ -108,8 +109,9 @@ const AdminOS = () => {
             onClose={() => setShowForm(false)}
           />
         ) : (
-          <div>
-            <h1>All Operating Systems</h1>
+          <div className="d-flex">
+            <Sidebar />
+            <h1 className="text-center mb-4">All Operating Systems</h1>
             <div><button onClick={handleAdd}>Add Power Supply Unit</button></div>
             <table className="table table-bordered">
               <thead>

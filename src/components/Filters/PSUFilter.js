@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const PSUFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => {
-    const brand = ["Corsair", "FSP", "InWin", "SilverStone", "HP", "Zalman", "Thermaltake", "Fractal Design", "Enermax", "Rosewill", "Seasonic", "Phanteks", "Cooler Master", "ASUS", "XPG", "Lian Li", "Cougar", "Deepcool", "BitFenix", "EVGA", "AeroCool", "GameMax", "Antec", "be quiet!", "XFX", "Gigabyte"]
-    const form_factor = ["ATX", "SFX", "Flex ATX", "Mini-ITX", "TFX"]
-    const efficiency_rating = ["80 Plus Gold", "80 Plus Platinum", "80 Plus Bronze", "80 Plus Silver"]
-    const modularity = ["Fully Modular", "Partially Modular", "Non-Modular"]
-    
+const PSUFilter = ({ filters, onFilterChange, onApplyFilters, onResetFilters }) => {
+    const brand = ["Corsair", "FSP", "InWin", "SilverStone", "HP", "Zalman", "Thermaltake", "Fractal Design", "Enermax", "Rosewill", "Seasonic", "Phanteks", "Cooler Master", "ASUS", "XPG", "Lian Li", "Cougar", "Deepcool", "BitFenix", "EVGA", "AeroCool", "GameMax", "Antec", "be quiet!", "XFX", "Gigabyte"];
+    const form_factor = ["ATX", "SFX", "Flex ATX", "Mini-ITX", "TFX"];
+    const efficiency_rating = ["80 Plus Gold", "80 Plus Platinum", "80 Plus Bronze", "80 Plus Silver"];
+    const modularity = ["Fully Modular", "Partially Modular", "Non-Modular"];
+
+    const [expandedFilters, setExpandedFilters] = useState({
+        brand: false,
+        form_factor: false,
+        efficiency_rating: false,
+        modularity: false,
+    });
 
     const handleCheckBoxChange = (key, value) => {
         const newValues = filters[key]?.includes(value)
@@ -22,61 +28,67 @@ const PSUFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =>
         onFilterChange('wattage', { min: Number(min), max: Number(max) });
     };
 
+    const toggleExpand = (filter) => {
+        setExpandedFilters(prevState => ({
+            ...prevState,
+            [filter]: !prevState[filter],
+        }));
+    };
+
+    const renderCheckboxes = (key, items) => {
+        return (
+            <div>
+                <h4>{key}</h4>
+                {items.slice(0, expandedFilters[key] ? items.length : 3).map((item) => (
+                    <div key={item}>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={filters[key]?.includes(item) || false}
+                                onChange={() => handleCheckBoxChange(key, item)}
+                            />
+                            {item}
+                        </label>
+                    </div>
+                ))}
+                {items.length > 3 && (
+                    <span
+                        onClick={() => toggleExpand(key)}
+                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        {expandedFilters[key] ? 'Show Less' : 'Show More'}
+                    </span>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="filter-container">
             <h3>Filter Power Supplies:</h3>
-            <div>
-                <h4>Manufacturer</h4>
-                {brand.map((brand) => (
-                    <label key={brand}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.brand?.includes(brand) || false}
-                            onChange={() => handleCheckBoxChange("brand", brand)}
-                        />
-                        {brand}
-                    </label>
-                ))}
+
+           {/* Brand Filter */}
+            <div className="text-white">
+                {renderCheckboxes('brand', brand)}
             </div>
-            <div>
-                <h4>Type</h4>
-                {form_factor.map((form_factor) => (
-                    <label key={form_factor}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.form_factor?.includes(form_factor) || false}
-                            onChange={() => handleCheckBoxChange("form_factor", form_factor)}
-                        />
-                        {form_factor}
-                    </label>
-                ))}
+
+            {/* Form Factor Filter */}
+            <div className="text-white">
+                {renderCheckboxes('form_factor', form_factor)}
             </div>
-            <div>
-                <h4>Efficiency Rating</h4>
-                {efficiency_rating.map((efficiency_rating) => (
-                    <label key={efficiency_rating}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.efficiency_rating?.includes(efficiency_rating) || false}
-                            onChange={() => handleCheckBoxChange("efficiency_rating", efficiency_rating)}
-                        />
-                        {efficiency_rating}
-                    </label>
-                ))}
+
+            {/* Efficiency Rating Filter */}
+            <div className="text-white">
+                {renderCheckboxes('efficiency_rating', efficiency_rating)}
             </div>
-            <div>
-                <h4>Modularity</h4>
-                {modularity.map((modularity) => (
-                    <label key={modularity}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.modularity?.includes(modularity) || false}
-                            onChange={() => handleCheckBoxChange("modularity", modularity)}
-                        />
-                        {modularity}
-                    </label>
-                ))}
+
+            {/* Modularity Filter */}
+            <div className="text-white">
+                {renderCheckboxes('modularity', modularity)}
             </div>
+
+
+            {/* Price Range Slider */}
             <div>
                 <h4>Price Range</h4>
                 <input
@@ -86,8 +98,10 @@ const PSUFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =>
                     value={filters.price?.max || 200}
                     onChange={(e) => handlePriceSliderChange(filters.price?.min || 0, e.target.value)}
                 />
-                <span>{filters.price?.min || 0}  $- {Number(filters.price?.max) || 200} $</span>
+                <span>{filters.price?.min || 0} $ - {Number(filters.price?.max) || 200} $</span>
             </div>
+
+            {/* Wattage Slider */}
             <div>
                 <h4>Wattage</h4>
                 <input
@@ -98,10 +112,13 @@ const PSUFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =>
                     onChange={(e) => handleWattageSliderChange(filters.wattage?.min || 0, e.target.value)}
                 />
                 <span>{filters.wattage?.min || 0} W - {Number(filters.wattage?.max) || 850} W</span>
-            </div>            
-            <button onClick={onApplyFilters}>Apply</button>
-            <button onClick={onResetFilters}>Reset</button>
+            </div>
+
+            {/* Apply and Reset Buttons */}
+            <button className='btn btn-outline-light me-2' onClick={onApplyFilters}>Apply</button>
+            <button className='btn btn-outline-danger' onClick={onResetFilters}>Reset</button>
         </div>
-     );
+    );
 };
+
 export default PSUFilter;

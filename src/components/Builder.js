@@ -1,10 +1,15 @@
+import {db} from '../backend/Firebase/firebase';
+import '../css/scrollbar.css';
+import { collection, getDocs, query, where} from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../backend/Context/authContext';
 import { useNavigate } from 'react-router-dom';
+import '../css/Builder.css';
 import { useEffect, useState } from 'react';
-import Header from './Layout/Header';
+import HompageCover from '../assets/HomepageCover.jpg';
 import NewBuild from './NewBuild';
 import ChangeBuild from './ChangeBuild';
+import BuilderImage from '../assets/Builder.jpg';
 import { getClosestBuild } from './BuilderAuth/buildAuth';
 import { getBuildCPU, getCPUInfo } from './GetBuildParts/GetCPUID';
 import { getBuildMotherboard, getMotherboardInfo } from './GetBuildParts/GetMBID';
@@ -98,7 +103,8 @@ const Builder = () => {
   const [PSUvisible, setPSUVisible] = useState(false);
   const [Casevisible, setCaseVisible] = useState(false);
   const [compatibilityMessage, setCompatibilityMessage] = useState('');
-  
+  const [compatibilityError, setCompatibilityError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   console.log(buildId);
 
@@ -329,28 +335,57 @@ const fetchCooler = async () => {
       }
     };
     const fetchTotalPrice = async () => {
-      if (buildId) {
-        const totalPrice = await GetBuildPrice(CurrentUser);
-        if (totalPrice) {
-          setTotalPrice(totalPrice);  
+      try{
+        if (buildId) {
+          const totalPrice = await GetBuildPrice(CurrentUser);
+          if (totalPrice) {
+            setTotalPrice(totalPrice);  
+          }
         }
-      }
+        else if (!buildId){
+          showLoginMessage = true;
+        }
+        else if (!CurrentUser){
+          setTotalPrice(0);
+        }
+        else{
+          setTotalPrice(0);
+        }
     }
+    catch{
+      setTotalPrice(0);
+    }
+  }
     const fetchTotalWattage = async () => {
-      if (buildId) {
-        const totalWattage = await GetBuildWattage(CurrentUser);
-        if (totalWattage) {
-          setTotalWatts(totalWattage);  
+      try{
+        if (buildId) {
+          const totalWattage = await GetBuildWattage(CurrentUser);
+          if (totalWattage) {
+            setTotalWatts(totalWattage);  
+          }
         }
-      }
+        else if (!buildId){
+          showLoginMessage = true;
+        }
+        else if (!CurrentUser){
+          setTotalWatts(0);
+        }
+        else{
+          setTotalWatts(0);
+        }
+    }catch{
+      setTotalWatts(0);
     }
+  }
     const fetchCompatibility = async () => {
       const compatibility = await CompatibilityCheck(CurrentUser);
       if (compatibility === true) {
         setCompatibilityMessage('Warning! These parts have potential compatibility issues.');
+        setCompatibilityError(false);
       }
       else{
         setCompatibilityMessage('Everything looks good!');
+        setCompatibilityError(true);
       }
     }
     const fetchExclamationMark = async () => {
@@ -387,6 +422,27 @@ const fetchCooler = async () => {
         return 0;
       }
     }
+    const checkBuild = async () => {
+      try {
+        const buildsRef = collection(db, "Build");
+        const q = query(buildsRef, where("user_id", "==", CurrentUser.uid));
+        const querySnapshot = await getDocs(q);
+    
+        // Show the popup only if the user has no build
+        if (querySnapshot.empty) {
+          setShowNewBuildPopup(true); // Show popup
+        } else {
+          setShowNewBuildPopup(false); // Hide popup
+        }
+      } catch (error) {
+        console.error("Error checking user build:", error);
+        setShowNewBuildPopup(false); // Ensure popup doesn't show on error
+      }
+    const img = new Image();
+    img.src = BuilderImage;
+    img.onload = () => setImageLoaded(true);
+    };
+    checkBuild();
     fetchExclamationMark();
     fetchCompatibility();
     fetchTotalWattage();
@@ -401,7 +457,7 @@ const fetchCooler = async () => {
     fetchCase();
     fetchOS();
     fetchNetAdapter();
-  }, [buildId]);
+  }, [buildId, CurrentUser, loading, showLoginMessage, navigate]);
 
   const displayCPUInfo = () => {
   if (cpuId) {
@@ -487,10 +543,14 @@ const fetchCooler = async () => {
 
   if (showLoginMessage) {
     return (
-      <div style={styles.wrapper}>
-        <div style={styles.messageBox}>
+      <div className='bg-dark' style={styles.wrapper}>
+        <div className='bg-transparent' style={styles.messageBox}>
           <h2>To use our Builder, you need to be logged in</h2>
-          <button style={styles.button} onClick={() => navigate('/login')}>
+          <button
+            className="btn btn-outline-light"
+            style={{ marginTop: '1rem' }}
+            onClick={() => navigate('/login')}
+          >
             Go to Login
           </button>
         </div>
@@ -506,118 +566,138 @@ const fetchCooler = async () => {
       </div>
     );
   }
+    return (
+      <div className="container py-5"
+      style={{
+        backgroundImage : `url(${BuilderImage})`,
+        backgroundSize: 'Cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh',
+        maxWidth: '100%',
+      }}>
+        {/* Build Header */}
+        <div className="mb-4 text-center">
+          <h1 className="display-5 text-light">Build: {buildName}</h1>
+        </div>
+  
+        {/* Parts Table */}
+        <table className="table transparent-table table-bordered text-center mt-4" style={{ width: '100%' }}>
+  <thead>
+    <tr>
+      <th scope="col" style={{ backgroundColor: 'transparent', color: '#fff', fontWeight: 'bold' }}>
+        Component
+      </th>
+      <th scope="col" colSpan={3} style={{ backgroundColor: 'transparent', color: '#fff', fontWeight: 'bold' }}>
+        Part Name
+      </th>
+      <th scope="col" style={{ backgroundColor: 'transparent', color: '#fff', fontWeight: 'bold' }}>
+        Price
+      </th>
+      <th scope="col" style={{ backgroundColor: 'transparent', color: '#fff', fontWeight: 'bold' }}>
+        Action
+      </th>
+      <th scope="col" style={{ backgroundColor: 'transparent', color: '#fff', fontWeight: 'bold' }}>
+        {/* Space for exclamation mark */}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    {[
+      { name: 'Motherboard', link: '/Motherboard', info: displayMBInfo, price: mbPrice, visible: MBvisible },
+      { name: 'CPU', link: '/CPU', info: displayCPUInfo, price: cpuPrice, visible: CPUvisible },
+      { name: 'CPU Cooler', link: '/CPU_Cooler', info: displayCoolerInfo, price: coolerPrice },
+      { name: 'RAM', link: '/RAM', info: displayRamInfo, price: ramPrice, visible: RAMvisible },
+      { name: 'GPU', link: '/GPU', info: displayGPUInfo, price: gpuPrice, visible: GPUvisible },
+      { name: 'Storage', link: '/Storage', info: displayStorageInfo, price: storagePrice, visible: Storagevisible },
+      { name: 'PSU', link: '/PSU', info: displayPSUInfo, price: psuPrice, visible: PSUvisible },
+      { name: 'Case', link: '/Case', info: displayCaseInfo, price: casePrice, visible: Casevisible },
+      { name: 'OS', link: '/OS', info: displayOSInfo, price: osPrice },
+      { name: 'Network Adapter', link: '/NetAdapter', info: displayNetAdapterInfo, price: naPrice },
+    ].map((component, index) => (
+      <tr key={index} className="table-striped-columns">
+        <th scope="row">
+          <Link to={component.link} className="text-primary">
+            {component.name}
+          </Link>
+        </th>
+        <td colSpan={3} className="text-white">
+          {component.info()}
+        </td>
+        <td className="font-weight-bold text-white">${component.price}</td>
+        <td>
+          <Link to={component.link}>
+            <button className="btn btn-outline-light btn-sm">
+              Add {component.name}
+            </button>
+          </Link>
+        </td>
+        <td className="text-center exclamation-cell">
+          {component.visible && (
+            <img
+              src={ExclamationMark}
+              alt="Exclamation Mark"
+              className="img-fluid"
+              style={{ maxWidth: '20px' }}
+            />
+          )}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
 
-return(
- <div style={styles.page}> 
-    <Header />
-    <span>Build Name: {buildName}</span>
-    <table className="table" style={styles.table}>
-        <thead>
-          <tr>
-            <th scope="col">Component</th>
-            <th scope="col" colSpan={3}>Part Name</th>
-            <th scope="col">Price</th>
-          </tr>
-        </thead>
-        <tbody><div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: MBvisible ? 'block' : 'none',}} /></div>
-          <tr>
-            
-            <th scope= "row"><Link to="/Motherboard">Motherboard</Link></th>
-            <td colSpan={3}>{displayMBInfo()}</td>
-            <td>{mbPrice}</td>
-            <td><Link to="/Motherboard"><button className="btn btn-outline-dark">Add Motherboard</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: CPUvisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/CPU">CPU</Link></th>
-            <td colSpan={3}>{displayCPUInfo()}</td>
-            <td>{cpuPrice}</td>
-            <td><Link to="/CPU"><button className="btn btn-outline-dark">Add CPU</button></Link></td>
-          </tr>
-          <tr>
-          <th scope="row"><Link to="/CPU_Cooler">CPU Cooler</Link></th>
-            <td colSpan={3}>{displayCoolerInfo()}</td>
-            <td>{coolerPrice}</td>
-            <td><Link to="/CPU_Cooler"><button className="btn btn-outline-dark">Add CPU Cooler</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: RAMvisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/RAM">RAM</Link></th>
-            <td colSpan={3}>{displayRamInfo()}</td>
-            <td>{ramPrice}</td>
-          <td> <Link to="/RAM"><button className="btn btn-outline-dark">Add RAM</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: GPUvisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/GPU">GPU</Link></th>
-            <td colSpan={3}>{displayGPUInfo()}</td>
-            <td>{gpuPrice}</td>
-            <td><Link to="/GPU"><button className="btn btn-outline-dark">Add GPU</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: Storagevisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/Storage">Storage</Link></th>
-            <td colSpan={3}>{displayStorageInfo()}</td>
-            <td>{storagePrice}</td>
-            <td><Link to="/Storage"><button className="btn btn-outline-dark">Add Storage</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: PSUvisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/PSU">PSU</Link></th>
-            <td colSpan={3}>{displayPSUInfo()}</td>
-            <td>{psuPrice}</td>
-            <td><Link to="/PSU"><button className="btn btn-outline-dark">Add PSU</button></Link></td>
-          </tr>
-          <div><img src={ExclamationMark} alt="Exclamation Mark" style={{ ...styles.image, display: Casevisible ? 'block' : 'none',}} /></div>
-          <tr>
-          <th scope="row"><Link to="/Case">Case</Link></th>
-            <td colSpan={3}>{displayCaseInfo()}</td>
-            <td>{casePrice}</td>
-            <td><Link to="/Case"><button className="btn btn-outline-dark">Add Case</button></Link></td>
-          </tr>
-          
-          <tr>
-          <th scope="row"><Link to="/OS">OS</Link></th>
-            <td colSpan={3}>{displayOSInfo()}</td>
-            <td>{osPrice}</td>
-            <td><Link to="/OS"><button className="btn btn-outline-dark">Add OS</button></Link></td>
-          </tr>
-          <tr>
-          <th scope="row"><Link to="/NetAdapter"> Network Adapter</Link></th>
-            <td colSpan={3}>{displayNetAdapterInfo()}</td>
-            <td>{naPrice}</td>
-            <td><Link to="/NetAdapter"><button className="btn btn-outline-dark">Add Network Adapter</button></Link></td>
-          </tr>
-      </tbody>
-    </table>
-    <div>
-      <table className='table' style={styles.table}>
-        <thead>
-          <tr>
-            <th scope="col">Estimated Cost: {total_price} $</th>
-            <th scope="col">Estimated Wattage: {total_watts} W</th>
-            <th scope="col">Compatibility: {compatibilityMessage}</th>
-          </tr>
-        </thead>
-      </table>
-    </div>
-    <div>
-    <button onClick={() => setShowNewBuildPopup(true)}>New Build</button>
-    <button onClick={() => setShowChangeBuildPopup(true)}>Change Build</button>
-    </div>
-      {/* Conditionally render popups as modals */}
-      {showNewBuildPopup && (
-        <div style={styles.modalOverlay}>
-          <NewBuild handleClose={handleClose} handleNewBuild={handleNewBuild} />
-        </div>
-      )}
-      {showChangeBuildPopup && (
-        <div style={styles.modalOverlay}>
-          <ChangeBuild handleClose={handleClose} handleChangeBuild={handleChangeBuild} />
-        </div>
-      )}
-  </div>
-)}
+                {/* Summary Table */}
+  <table className="table transparent-table table-bordered text-center mt-4">
+  <thead>
+    <tr>
+      <th>Compatibility</th>
+      <th>Estimated Wattage</th>
+      <th>Estimated Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td className={compatibilityError ? 'compatibility-success' : 'compatibility-error'}>
+        {compatibilityMessage}
+      </td>
+      <td>{total_watts} W</td>
+      <td>${total_price}</td>
+    </tr>
+  </tbody>
+</table>
+
+        {/* Action Buttons */}
+        {/* Action Buttons */}
+<div className="text-center mt-4">
+  <button
+    className="btn btn-outline-light mx-2 action-button"
+    onClick={() => setShowNewBuildPopup(true)}
+  >
+    New Build
+  </button>
+  <button
+    className="btn btn-outline-light mx-2 action-button"
+    onClick={() => setShowChangeBuildPopup(true)}
+  >
+    Change Build
+  </button>
+</div>
+
+  
+        {/* Popups */}
+        {showNewBuildPopup && (
+          <div className="modal-overlay">
+            <NewBuild handleClose={handleClose} handleNewBuild={handleNewBuild} />
+          </div>
+        )}
+        {showChangeBuildPopup && (
+          <div className="modal-overlay">
+            <ChangeBuild handleClose={handleClose} handleChangeBuild={handleChangeBuild} />
+          </div>
+        )}
+      </div>
+    );
+  }
 
 const styles = {
   wrapper: {
@@ -627,6 +707,9 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundImage : `url(${HompageCover})`,
+    backgroundSize: 'Cover',
+    backgroundPosition: 'center',
   },
   messageBox: {
     zIndex: 10,
@@ -634,25 +717,6 @@ const styles = {
     padding: '2rem',
     borderRadius: '8px',
     textAlign: 'center',
-  },
-  button: {
-    padding: '0.5rem 1rem',
-    marginTop: '1rem',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  blurredBackground: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    backdropFilter: 'blur(8px)',
-    zIndex: 1,
   },
   loadingWrapper: {
     width: '100%',
@@ -665,20 +729,6 @@ const styles = {
   spinner: {
     fontSize: '1.5rem',
     fontWeight: 'bold',
-  },
-  image: {
-    width: '50px',
-    right: '1207px',
-    position: 'absolute',
-  },
-  table: {
-    width: '92%',
-    marginLeft: '50px',
-  },
-  page : {
-    width: '100%',
-    overflowX: 'hidden',
-    marginBottom: '50px'
   }
 };
 

@@ -122,15 +122,15 @@ function Storage() {
                     <tbody>
                         {storage.map((item) => (
                             <tr key={item.storage_id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.form_factor}</td>
-                                <td>{item.capacity}</td>
-                                <td>{item.cache}</td>
-                                <td>{item.interface}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.form_factor}</td>
+                                <td className='text-white'>{item.capacity}</td>
+                                <td className='text-white'>{item.cache}</td>
+                                <td className='text-white'>{item.interface}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className='btn btn-outline-light' onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

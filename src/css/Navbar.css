@@ -33,7 +33,7 @@
     font-weight: bold; /* Bold text */
     text-transform: uppercase; /* Uppercase text */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for background and scale effect */
+    transition: all 0.3s ease;  /* Smooth transition for background and scale effect */
   }
 
   #btn:hover {
@@ -44,3 +44,47 @@
   #btn:focus {
     outline: none; /* Remove default outline */
     box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.5); /* Add a custom focus ring */}
+
+    .custom-hover:hover {
+      background-color: #444; /* Slightly lighter dark background */
+      transform: scale(1.05); /* Slightly enlarge the item */
+      transition: all 0.3s ease; /* Smooth transition for all properties */
+    }
+    
+    .custom-hover {
+      transition: all 0.3s ease; /* Ensure a smooth effect even before hovering */
+    }
+    .custom-hover-btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition for scaling */
+    }
+    
+    .custom-hover-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255, 255, 255, 0.3);  /* Light white overlay */
+      filter: blur(15px);  /* Intense blur effect */
+      transition: opacity 0.3s ease;
+      opacity: 0; /* Initially not visible */
+      z-index: -1;
+    }
+    
+    .custom-hover-btn:hover::before {
+      opacity: 1; /* Show the blur effect on hover */
+    }
+    
+    .custom-hover-btn:hover {
+      color: white;
+      background-color: transparent; /* Keep the background transparent */
+      transform: scale(1.1);  /* Slightly enlarge the button */
+    }
+    
+    .custom-hover-btn:active {
+      background-color: transparent; /* Keep background transparent on click */
+      transform: scale(1);  /* Reset size to normal after clicking */
+    }

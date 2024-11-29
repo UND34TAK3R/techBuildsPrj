@@ -119,15 +119,15 @@ function PSU() {
                     <tbody>
                         {psu.map((item) => (
                             <tr key={item.psu_id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.form_factor}</td>
-                                <td>{item.efficiency_rating}</td>
-                                <td>{item.wattage}</td>
-                                <td>{item.modularity}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.form_factor}</td>
+                                <td className='text-white'>{item.efficiency_rating}</td>
+                                <td className='text-white'>{item.wattage}</td>
+                                <td className='text-white'>{item.modularity}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className='btn btn-outline-light' onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

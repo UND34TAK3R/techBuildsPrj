@@ -45,35 +45,42 @@ const ChangeBuild = ({ handleClose, ChangeBuild }) => {
 
     return (
         <div className="overlay">
-            <div className="popup">
+            <div className="popup bg-dark">
                 <h2>Change Build</h2>
-                <table className="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">Select</th>
-                            <th scope="col">Build Name</th>
-                            <th scope="col">Build Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {build.map((item) => (
-                            <tr key={item.id}>
-                                <td>
-                                    <input
-                                        type="checkbox"
-                                        onChange={() => handleChangeBuild(item.id)}
-                                    />
-                                </td>
-                                <td>{item.build_name}</td>
-                                <td>{item.build_type}</td>
+                <div className="table-responsive bg-dark">
+                    <table className="table table-bordered table-striped table-dark text-white">
+                        <thead>
+                            <tr>
+                                <th scope="col">Select</th>
+                                <th scope="col">Build Name</th>
+                                <th scope="col">Build Type</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <button className="btn btn-primary" onClick={() => handleChange()}>Change Build</button>
+                        </thead>
+                        <tbody>
+                            {build.map((item) => (
+                                <tr key={item.id}>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            onChange={() => handleChangeBuild(item.id)}
+                                        />
+                                    </td>
+                                    <td>{item.build_name}</td>
+                                    <td>{item.build_type}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="text-center">
+                    <button className="btn btn-outline-light mt-3" onClick={() => handleChange()}>
+                        Change Build
+                    </button>
+                </div>
             </div>
         </div>
     );
+    
 };
 
 export default ChangeBuild;

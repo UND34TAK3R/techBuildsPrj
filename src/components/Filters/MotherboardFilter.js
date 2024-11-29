@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => {
-    const form_factor = ["ATX", "E-ATX", "Micro-ATX", "Mini-ITX",]
-    const brand = ["MSI","ASUS", "Gigabyte", "ASRock", "EVGA" ]
-    const socket = ["AM4", "LGA1200", "BGA1526", "AM5", "LGA1700", "LGA 1151", "LGA 2066"  ]
-    const chipset = ["Z390", "Z690", "Z490", "B550", "X470", "Z590", "B450","B360", "Z370", "B460", "X570", "H310", "A320", "H470", "H410", ]
-    const memory_type = ["DDR4", "DDR5", ]
+const MotherboardFilter = ({ filters, onFilterChange, onApplyFilters, onResetFilters }) => {
+    const form_factor = ["ATX", "E-ATX", "Micro-ATX", "Mini-ITX"];
+    const brand = ["MSI", "ASUS", "Gigabyte", "ASRock", "EVGA"];
+    const socket = ["AM4", "LGA1200", "BGA1526", "AM5", "LGA1700", "LGA 1151", "LGA 2066"];
+    const chipset = ["Z390", "Z690", "Z490", "B550", "X470", "Z590", "B450", "B360", "Z370", "B460", "X570", "H310", "A320", "H470", "H410"];
+    const memory_type = ["DDR4", "DDR5"];
 
+    const [expandedFilters, setExpandedFilters] = useState({
+        brand: false,
+        socket: false,
+        form_factor: false,
+        chipset: false,
+        memory_type: false,
+    });
+
+    // Handle checkbox change
     const handleCheckBoxChange = (key, value) => {
         const newValues = filters[key]?.includes(value)
             ? filters[key].filter(v => v !== value)
@@ -14,11 +23,12 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
         onFilterChange(key, newValues);
     };
 
+    // Handle slider change
     const handlePriceSliderChange = (min, max) => {
         onFilterChange('price', { min: Number(min), max: Number(max) });
     };
 
-    const RamSlotsSliderChange = (min, max) => {
+    const handleRamSlotsSliderChange = (min, max) => {
         onFilterChange('ram_slots', { min: Number(min), max: Number(max) });
     };
 
@@ -30,80 +40,61 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
         onFilterChange('memory_speed', { min: Number(min), max: Number(max) });
     };
 
+    // Handle radio button change
     const handleRadioChange = (key, value) => {
         onFilterChange(key, value);
-    }
-    
+    };
+
+    // Toggle expand/collapse for filter options
+    const toggleExpand = (filter) => {
+        setExpandedFilters(prevState => ({
+            ...prevState,
+            [filter]: !prevState[filter],
+        }));
+    };
+
+    // Render checkboxes for any filter category
+    const renderCheckboxes = (key, items) => {
+        return (
+            <div>
+                <h4>{key}</h4>
+                {items.slice(0, expandedFilters[key] ? items.length : 3).map((item) => (
+                    <div key={item}>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={filters[key]?.includes(item) || false}
+                                onChange={() => handleCheckBoxChange(key, item)}
+                            />
+                            {item}
+                        </label>
+                    </div>
+                ))}
+                {items.length > 3 && (
+                    <span 
+                        onClick={() => toggleExpand(key)} 
+                        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        {expandedFilters[key] ? 'Show Less' : 'Show More'}
+                    </span>
+                )}
+            </div>
+        );
+    };
 
     return (
         <div className="filter-container">
             <h3>Filter Motherboards:</h3>
-            <div>
-                <h4>Manufacturer</h4>
-                {brand.map((brand) => (
-                    <label key={brand}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.brand?.includes(brand) || false}
-                            onChange={() => handleCheckBoxChange("brand", brand)}
-                        />
-                        {brand}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Sockets</h4>
-                {socket.map((socket) => (
-                    <label key={socket}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.socket?.includes(socket) || false}
-                            onChange={() => handleCheckBoxChange("socket", socket)}
-                        />
-                        {socket}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Form Factor</h4>
-                {form_factor.map((form_factor) => (
-                    <label key={form_factor}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.form_factor?.includes(form_factor) || false}
-                            onChange={() => handleCheckBoxChange("form_factor", form_factor)}
-                        />
-                        {form_factor}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Chipset</h4>
-                {chipset.map((chipset) => (
-                    <label key={chipset}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.chipset?.includes(chipset) || false}
-                            onChange={() => handleCheckBoxChange("chipset", chipset)}
-                        />
-                        {chipset}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Memory Type</h4>
-                {memory_type.map((memory_type) => (
-                    <label key={memory_type}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.memory_type?.includes(memory_type) || false}
-                            onChange={() => handleCheckBoxChange("memory_type", memory_type)}
-                        />
-                        {memory_type}
-                    </label>
-                ))}
-            </div>
-            {/* Slider for Price */}
+
+        <div className='text-white'>
+            {renderCheckboxes('brand', brand)}
+            {renderCheckboxes('socket', socket)}
+            {renderCheckboxes('form_factor', form_factor)}
+            {renderCheckboxes('chipset', chipset)}
+            {renderCheckboxes('memory_type', memory_type)}
+        </div>
+
+            {/* Price Range Slider */}
             <div>
                 <h4>Price Range</h4>
                 <input
@@ -116,7 +107,8 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
                 />
                 <span>{filters.price?.min || 0} $ - {Number(filters.price?.max) || 1000} $</span>
             </div>
-            {/* Slider for Ram Slots */}
+
+            {/* Memory Slots Slider */}
             <div>
                 <h4>Memory Slots</h4>
                 <input
@@ -124,12 +116,13 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
                     min="0"
                     max="4"
                     step="1"
-                    value={filters.ram_slots?.max || 16}
-                    onChange={(e) => RamSlotsSliderChange(filters.ram_slots?.min || 0, e.target.value)}
+                    value={filters.ram_slots?.max || 4}
+                    onChange={(e) => handleRamSlotsSliderChange(filters.ram_slots?.min || 0, e.target.value)}
                 />
-                <span>{filters.ram_slots?.min || 0} - {Number(filters.ram_slots?.max) || 16}</span>
+                <span>{filters.ram_slots?.min || 0} - {Number(filters.ram_slots?.max) || 4}</span>
             </div>
-            {/* Slider for Max Memory */}
+
+            {/* Max Memory Slider */}
             <div>
                 <h4>Max Memory</h4>
                 <input
@@ -140,9 +133,10 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
                     value={filters.max_memory?.max || 128}
                     onChange={(e) => handleMaxMemorySliderChange(filters.max_memory?.min || 0, e.target.value)}
                 />
-                <span>{filters.max_memory?.min || 0} GB - {Number(filters.max_memory?.max) || 512} GB</span>
+                <span>{filters.max_memory?.min || 0} GB - {Number(filters.max_memory?.max) || 128} GB</span>
             </div>
-            {/* Slider for Memory Speed */}
+
+            {/* Memory Speed Slider */}
             <div>
                 <h4>Memory Speed</h4>
                 <input
@@ -155,47 +149,54 @@ const MotherboardFilter = ({filters, onFilterChange, onApplyFilters, onResetFilt
                 />
                 <span>{filters.memory_speed?.min || 0} MHz - {Number(filters.memory_speed?.max) || 4000} MHz</span>
             </div>
+
+            {/* Bluetooth Support Radio */}
             <div>
                 <h4>Bluetooth Support</h4>
-                <label>
+                <label className='text-white'>
                     <input
-                        type = "radio"
-                        checked ={filters.bluetooth === true}
-                        onChange = {() => handleRadioChange('bluetooth', true)}
+                        type="radio"
+                        checked={filters.bluetooth === true}
+                        onChange={() => handleRadioChange('bluetooth', true)}
                     />
                     Yes
                 </label>
-                <label>
+                <label className='text-white'>
                     <input
-                        type = "radio"
-                        checked ={filters.bluetooth === false}
-                        onChange = {() => handleRadioChange('bluetooth', false)}
+                        type="radio"
+                        checked={filters.bluetooth === false}
+                        onChange={() => handleRadioChange('bluetooth', false)}
                     />
                     No
                 </label>
             </div>
+
+            {/* M.2 Slots Radio */}
             <div>
-                <h4>M2 Slots</h4>
-                <label>
+                <h4>M.2 Slots</h4>
+                <label className='text-white'>
                     <input
-                        type = "radio"
-                        checked ={filters.m2_slots === true}
-                        onChange = {() => handleRadioChange('m2_slots', true)}
+                        type="radio"
+                        checked={filters.m2_slots === true}
+                        onChange={() => handleRadioChange('m2_slots', true)}
                     />
                     Yes
                 </label>
-                <label>
+                <label className='text-white'>
                     <input
-                        type = "radio"
-                        checked ={filters.m2_slots === false}
-                        onChange = {() => handleRadioChange('m2_slots', false)}
+                        type="radio"
+                        checked={filters.m2_slots === false}
+                        onChange={() => handleRadioChange('m2_slots', false)}
                     />
                     No
                 </label>
             </div>
-            <button onClick={onApplyFilters}>Apply</button>
-            <button onClick={onResetFilters}>Reset</button>
+
+            {/* Apply and Reset Buttons */}
+            <button className='btn btn-outline-light me-2' onClick={onApplyFilters}>Apply</button>
+            <button className='btn btn-outline-danger' onClick={onResetFilters}>Reset</button>
         </div>
-     );
+    );
 };
+
 export default MotherboardFilter;

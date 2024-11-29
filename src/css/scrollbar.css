@@ -1,0 +1,49 @@
+/* Ensure the body does not have unwanted horizontal scrolling */
+body {
+  overflow-x: hidden; /* Prevent page-wide horizontal scroll */
+}
+
+/* Container with horizontal scrolling */
+.scroll-container {
+  display: flex; /* Or inline-block, depending on your layout */
+  overflow-x: auto; /* Enables horizontal scrolling */
+  white-space: nowrap; /* Prevents content from wrapping */
+  width: 100%; /* Make sure the container is not larger than the viewport */
+}
+
+/* Individual scrollable items */
+.scroll-item {
+  min-width: 300px; /* Width of each item, adjust as needed */
+  margin-right: 10px; /* Space between items */
+}
+
+/* Style the scrollbar */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+  background: transparent;
+  background-image: url('../assets/HomepageCover.jpg'); /* Optional background image */
+}
+
+/* Style the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: transparent; /* Transparent track */
+  border-radius: 10px; /* Rounded corners */
+}
+
+/* Style the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5); /* Make the thumb visible */
+  border-radius: 10px; /* Rounded corners */
+  border: 3px solid rgba(0, 0, 0, 0); /* Remove border for subtle appearance */
+}
+
+/* Style the scrollbar thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly darker when hovered */
+}
+
+/* Make the scrollbar completely transparent if preferred */
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-thumb {
+  background: transparent; /* Transparent track and thumb */
+}

@@ -6,7 +6,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import HomePage from './components/Homepage';
 import NavBar from './components/NavBar';
 import Benchmark from './components/Benchmark';
-import Contact from './components/Contact'; 
+import About from './components/About'; 
 import Builder from './components/Builder';
 import PreBuilt from './components/Prebuilt';
 import Parts from './components/Parts';
@@ -70,7 +70,7 @@ function RoutesWrapper() {
         <Route path="PreBuilt" element={<PreBuilt />} />
         <Route path="Parts" element={<Parts />} />
         <Route path="Benchmark" element={<Benchmark />} />
-        <Route path="Contact" element={<Contact />} />
+        <Route path="About" element={<About />} />
         <Route path="signup" element={<SignUp />} />
         <Route path="login" element={<Login />} />
         <Route path="forgotpasswd" element={<ForgotPasswd />} />

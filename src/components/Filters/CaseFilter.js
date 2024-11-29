@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const CaseFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) => {
-    const brand = ["Corsair", "ASUS", "InWin", "SilverStone", "CoolerMaster", "Thermaltake", "Fractal Design", "Lian Li", "Phanteks", "NZXT", "be quiet!"]
-    const color = ["Black", "White", "Gray", "Red"]
-    const type = ["Mid Tower", "Micro ATX", "Full Tower"]
-    const form_factor = ["ATX", "Micro-ATX"]
-    const material = ["Aluminum", "Steel", "Plastic/Steel"]
+const CaseFilter = ({ filters, onFilterChange, onApplyFilters, onResetFilters }) => {
+    const brand = ["Corsair", "ASUS", "InWin", "SilverStone", "CoolerMaster", "Thermaltake", "Fractal Design", "Lian Li", "Phanteks", "NZXT", "be quiet!"];
+    const color = ["Black", "White", "Gray", "Red"];
+    const type = ["Mid Tower", "Micro ATX", "Full Tower"];
+    const form_factor = ["ATX", "Micro-ATX"];
+    const material = ["Aluminum", "Steel", "Plastic/Steel"];
+    
+    const [expandedFilters, setExpandedFilters] = useState({
+        brand: false,
+        color: false,
+        type: false,
+        form_factor: false,
+        material: false,
+    });
 
     const handleCheckBoxChange = (key, value) => {
         const newValues = filters[key]?.includes(value)
@@ -26,76 +34,51 @@ const CaseFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =
         onFilterChange('max_cooler_height', { min: Number(min), max: Number(max) });
     };
 
+    const toggleExpand = (filter) => {
+        setExpandedFilters(prevState => ({
+            ...prevState,
+            [filter]: !prevState[filter],
+        }));
+    };
+
+    const renderCheckboxes = (key, items) => {
+        return (
+            <div>
+                <h4 style={{ color: 'white' }}>{key}</h4>
+                {items.slice(0, expandedFilters[key] ? items.length : 3).map((item) => (
+                    <div key={item} style={{ marginBottom: '10px' }}>
+                        <label style={{ display: 'block', color: 'white' }}>
+                            <input
+                                type="checkbox"
+                                checked={filters[key]?.includes(item) || false}
+                                onChange={() => handleCheckBoxChange(key, item)}
+                            />
+                            {item}
+                        </label>
+                    </div>
+                ))}
+                {items.length > 3 && (
+                    <span 
+                        onClick={() => toggleExpand(key)} 
+                        style={{ color: 'white', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                        {expandedFilters[key] ? 'Show Less' : 'Show More'}
+                    </span>
+                )}
+            </div>
+        );
+    };
+
     return (
         <div className="filter-container">
-            <h3>Filter Cases:</h3>
+            <h3 style={{ color: 'white' }}>Filter Cases:</h3>
+            {renderCheckboxes('brand', brand)}
+            {renderCheckboxes('color', color)}
+            {renderCheckboxes('type', type)}
+            {renderCheckboxes('form_factor', form_factor)}
+            {renderCheckboxes('material', material)}
             <div>
-                <h4>Manufacturer</h4>
-                {brand.map((brand) => (
-                    <label key={brand}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.brand?.includes(brand) || false}
-                            onChange={() => handleCheckBoxChange("brand", brand)}
-                        />
-                        {brand}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Color</h4>
-                {color.map((color) => (
-                    <label key={color}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.color?.includes(color) || false}
-                            onChange={() => handleCheckBoxChange("color", color)}
-                        />
-                        {color}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Type</h4>
-                {type.map((type) => (
-                    <label key={type}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.type?.includes(type) || false}
-                            onChange={() => handleCheckBoxChange("type", type)}
-                        />
-                        {type}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Motherboard Form Factor</h4>
-                {form_factor.map((form_factor) => (
-                    <label key={form_factor}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.form_factor?.includes(form_factor) || false}
-                            onChange={() => handleCheckBoxChange("form_factor", form_factor)}
-                        />
-                        {form_factor}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Material</h4>
-                {material.map((material) => (
-                    <label key={material}>
-                        <input
-                            type="checkbox"
-                            checked = {filters.material?.includes(material) || false}
-                            onChange={() => handleCheckBoxChange("material", material)}
-                        />
-                        {material}
-                    </label>
-                ))}
-            </div>
-            <div>
-                <h4>Price Range</h4>
+                <h4 style={{ color: 'white' }}>Price Range</h4>
                 <input
                     type="range"
                     min="0"
@@ -107,7 +90,7 @@ const CaseFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =
             </div>
             {/* Slider for max_gpu_length */}
             <div>
-                <h4>GPU Length</h4>
+                <h4 style={{ color: 'white' }}>GPU Length</h4>
                 <input
                     type="range"
                     min="0"
@@ -119,7 +102,7 @@ const CaseFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =
             </div>
             {/* Slider for Threads */}
             <div>
-                <h4>Cooler Height</h4>
+                <h4 style={{ color: 'white' }}>Cooler Height</h4>
                 <input
                     type="range"
                     min="0"
@@ -128,10 +111,11 @@ const CaseFilter = ({filters, onFilterChange, onApplyFilters, onResetFilters}) =
                     onChange={(e) => handleCoolerHeightSliderChange(filters.max_cooler_height?.min || 0, e.target.value)}
                 />
                 <span>{filters.max_cooler_height?.min || 0} mm - {Number(filters.max_cooler_height?.max) || 170} mm</span>
-            </div>            
-            <button onClick={onApplyFilters}>Apply</button>
-            <button onClick={onResetFilters}>Reset</button>
+            </div>
+            <button className='btn btn-outline-light me-2' onClick={onApplyFilters} style={{ marginTop: '10px' }}>Apply</button>
+            <button className='btn btn-outline-danger' onClick={onResetFilters} style={{ marginTop: '10px' }}>Reset</button>
         </div>
-     );
+    );
 };
+
 export default CaseFilter;

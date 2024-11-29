@@ -1,0 +1,139 @@
+/* Custom style for alternating row colors */
+.table-light {
+  background-color: #f8f9fa !important;
+}
+
+.table-dark {
+  background-color: #343a40 !important;
+}
+
+.text-primary {
+  color: #007bff !important;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.btn-outline-success {
+  border-color: #28a745;
+  color: #28a745;
+}
+
+.btn-outline-success:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Exclamation mark styling */
+.img-fluid {
+  max-width: 20px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Transparent background for the table */
+.table.transparent-table {
+  background-color: transparent !important;
+  color: white;
+  border: 1px solid #ccc; /* Optional: You can add a border color here */
+}
+
+/* Ensure header text is light */
+.table.transparent-table thead th {
+  background-color: transparent !important;
+  color: white;
+}
+
+.table.transparent-table tbody td {
+  background-color: transparent !important;
+  color: white;
+}
+
+.table.transparent-table tbody {
+  background-color: transparent !important;
+  color: white;
+}
+
+/* Style the compatibility message: green for success, red for error */
+.table.transparent-table .compatibility-success {
+  color: #28a745; /* Green for success */
+}
+
+.table.transparent-table .compatibility-error {
+  color: #dc3545; /* Red for error */
+}
+
+/* Make the table transparent */
+.transparent-table {
+  background-color: transparent !important;
+  border-color: #fff; /* Keep borders white for visibility */
+}
+
+/* Header styling */
+.transparent-table thead {
+  background-color: transparent !important;
+}
+
+.transparent-table th {
+  color: #fff; /* Set text color to white */
+  font-weight: bold;
+  background-color: transparent !important; /* Remove background color */
+}
+
+/* Body styling */
+.transparent-table tbody {
+  background-color: transparent !important;
+  
+}
+
+.transparent-table td,
+.transparent-table th {
+  color: #fff; /* Set text color to white for table cells */
+}
+
+/* Stripe the rows with a subtle alternating color */
+.transparent-table tbody tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.1); /* Light stripe for alternating rows */
+}
+
+/* Exclamation mark cell: Remove borders around the image and cell */
+.transparent-table td.exclamation-cell {
+  border: none !important;  /* Remove any border around the cell */
+  padding: 0 !important;     /* Remove padding for the cell */
+  text-align: center;        /* Ensure the content (image) is centered */
+  vertical-align: middle;    /* Ensure the content (image) is vertically centered */
+  position: relative;        /* Position the image relative to the cell */
+  right : 10px;
+  
+}
+
+/* Optional: Ensure no borders around the image */
+.transparent-table td.exclamation-cell img {
+  max-width: 20px;          /* Set the max width of the image */
+  display: block;           /* Ensure the image is block-level */
+  margin: 0 auto;           /* Center the image horizontally */
+  border: none !important;  /* Ensure no border around the image */
+}
+
+/* Remove all borders in transparent table */
+.transparent-table td, .transparent-table th {
+  border: none !important;
+}
+
+/* Button styling */
+.transparent-table .btn-outline-light {
+  color: #fff;
+  border-color: #fff;
+}
+
+.transparent-table .btn-outline-light:hover {
+  background-color: #fff;
+  color: #343a40; /* Dark text on hover */
+}
+
+

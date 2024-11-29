@@ -127,14 +127,14 @@ function NetAdapter() {
                     <tbody>
                         {NetAdapters.map((item) => (
                             <tr key={item.na_id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.wireless_standard}</td>
-                                <td>{item.interface}</td>
-                                <td>{item.speed}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.wireless_standard}</td>
+                                <td className='text-white'>{item.interface}</td>
+                                <td className='text-white'>{item.speed}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

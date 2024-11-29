@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getIdTokenResult } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import {auth} from "../../backend/Firebase/firebase";
+import Sidebar from "./sidebar";
 
 const AdminStorage = () => {
   const [storageDevices, setStorageDevices] = useState([]);
@@ -69,8 +70,9 @@ const AdminStorage = () => {
   }
 
   return (
-    <div>
-      <h1>All Storage Devices</h1>
+    <div className="d-flex">
+            <Sidebar />
+      <h1 className="text-center mb-4">All Storage Devices</h1>
       <div><button onClick={handleAdd}>Add Storage Device</button></div>
       <div>
         <table className="table table-bordered">

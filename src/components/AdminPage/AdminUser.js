@@ -74,9 +74,9 @@ const AdminUser = () => {
     };
 
     return (
-        <div>
+        <div className="d-flex">
             <Sidebar />
-            <h1>All Users</h1>
+            <h1 className="text-center mb-4">All Users</h1>
             <div>
                 <button>Add User</button>
                 <table>

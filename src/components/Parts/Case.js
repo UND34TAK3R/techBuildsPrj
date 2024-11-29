@@ -6,6 +6,7 @@ import { getClosestBuild } from '../BuilderAuth/buildAuth';
 import { useAuth } from '../../backend/Context/authContext'; // Adjust based on your auth context
 import CaseFilter from 'components/Filters/CaseFilter';
 import '../../css/filter.css';
+import BuilderImage from '../../assets/Builder.jpg';
 
 function Case() {
     const [cases, setCases] = useState([]);
@@ -103,12 +104,22 @@ function Case() {
     };
 
     return (
-        <div className="case-page"><CaseFilter filters={pendingFilters} 
-            onFilterChange={handleFilterChange} 
-            onApplyFilters={handleApplyFilters} 
-            onResetFilters={handleResetFilters}  />
+        <div className="case-page">
+            <CaseFilter 
+                filters={pendingFilters} 
+                onFilterChange={handleFilterChange} 
+                onApplyFilters={handleApplyFilters} 
+                onResetFilters={handleResetFilters}  
+                style={{
+                    backgroundImage: `url(${BuilderImage})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    minHeight: '100vh',
+                    maxWidth: '100%',
+                }}
+            />
             <div className="case-table">
-                <table className="table table-bordered">
+                <table className="table table-bordered table-transparent">
                     <thead>
                         <tr>
                             <th scope="col">Brand</th>
@@ -125,16 +136,16 @@ function Case() {
                     <tbody>
                         {cases.map((item) => (
                             <tr key={item.id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.form_factor}</td>
-                                <td>{item.color}</td>
-                                <td>{item.material}</td>
-                                <td>{item.volume}</td>
-                                <td>{item.fan_count}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.form_factor}</td>
+                                <td className='text-white'>{item.color}</td>
+                                <td className='text-white'>{item.material}</td>
+                                <td className='text-white'>{item.volume}</td>
+                                <td className='text-white'>{item.fan_count}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>
@@ -145,6 +156,7 @@ function Case() {
             </div>
         </div>
     );
+    
 }
 
 export default Case;

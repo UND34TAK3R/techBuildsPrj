@@ -105,12 +105,12 @@ function OS() {
                     <tbody>
                         {os.map((item) => (
                             <tr key={item.os_id}>
-                                <td>{item.name}</td>
-                                <td>{item.version}</td>
-                                <td>{item.architecture}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.name}</td>
+                                <td className='text-white'>{item.version}</td>
+                                <td className='text-white'>{item.architecture}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

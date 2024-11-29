@@ -112,14 +112,14 @@ const handleResetFilters = () => {
                 <tbody>
                     {coolers.map((item) => (
                         <tr key={item.id}>
-                            <td>{item.brand}</td>
-                            <td>{item.model}</td>
-                            <td>{item.cooler_type}</td>
-                            <td>{item.max_noize}</td>
-                            <td>{item.fan_height}</td>
-                            <td>{item.price}</td>
+                            <td className='text-white'>{item.brand}</td>
+                            <td className='text-white'>{item.model}</td>
+                            <td className='text-white'>{item.cooler_type}</td>
+                            <td className='text-white'>{item.max_noize}</td>
+                            <td className='text-white'>{item.fan_height}</td>
+                            <td className='text-white'>{item.price}</td>
                             <td>
-                                <button onClick={() => handleAddToBuild(item.id)}>
+                                <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>
                                     Add To Build
                                 </button>
                             </td>

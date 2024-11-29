@@ -134,13 +134,13 @@ function Motherboard() {
                     <tbody>
                         {mb.map((item) => (
                             <tr key={item.id}>
-                                <td>{item.model}</td>
-                                <td>{item.form_factor}</td>
-                                <td>{item.socket}</td>
-                                <td>{item.ram_slots}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.form_factor}</td>
+                                <td className='text-white'>{item.socket}</td>
+                                <td className='text-white'>{item.ram_slots}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>Add To Build</button>
+                                    <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>Add To Build</button>
                                 </td>
                             </tr>
                         ))}

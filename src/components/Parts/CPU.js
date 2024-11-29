@@ -127,17 +127,17 @@ function CPU() {
                     <tbody>
                         {cpus.map((item) => (
                             <tr key={item.id}>
-                                <td>{item.model}</td>
-                                <td>{item.brand}</td>
-                                <td>{item.cores}</td>
-                                <td>{item.threads}</td>
-                                <td>{item.architecture}</td>
-                                <td>{item.base_clock}</td>
-                                <td>{item.boost_clock}</td>
-                                <td>{item.tdp}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.cores}</td>
+                                <td className='text-white'>{item.threads}</td>
+                                <td className='text-white'>{item.architecture}</td>
+                                <td className='text-white'>{item.base_clock}</td>
+                                <td className='text-white'>{item.boost_clock}</td>
+                                <td className='text-white'>{item.tdp}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className='btn btn-outline-light' onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>

@@ -132,15 +132,15 @@ function GPU() {
                     <tbody>
                         {gpu.map((item) => (
                             <tr key={item.gpu_id}>
-                                <td>{item.brand}</td>
-                                <td>{item.model}</td>
-                                <td>{item.memory_size}</td>
-                                <td>{item.core_clock}</td>
-                                <td>{item.boost_clock}</td>
-                                <td>{item.length}</td>
-                                <td>{item.price}</td>
+                                <td className='text-white'>{item.brand}</td>
+                                <td className='text-white'>{item.model}</td>
+                                <td className='text-white'>{item.memory_size}</td>
+                                <td className='text-white'>{item.core_clock}</td>
+                                <td className='text-white'>{item.boost_clock}</td>
+                                <td className='text-white'>{item.length}</td>
+                                <td className='text-white'>{item.price}</td>
                                 <td>
-                                    <button onClick={() => handleAddToBuild(item.id)}>
+                                    <button className="btn btn-outline-light" onClick={() => handleAddToBuild(item.id)}>
                                         Add To Build
                                     </button>
                                 </td>
